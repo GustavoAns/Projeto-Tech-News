@@ -3,6 +3,8 @@ import re
 import time
 import requests
 
+from tech_news.database import create_news
+
 
 # Requisito 1
 def fetch(url):
@@ -40,8 +42,6 @@ def scrape_next_page_link(html_content):
     return listStrings
 
 
-# Requisito 4
-
 def scrape_quant_comments(html_content):
     if html_content is None or html_content == '':
         return 0
@@ -55,6 +55,7 @@ def scrape_quant_comments(html_content):
     return comments_count
 
 
+# Requisito 4
 def scrape_noticia(html_content):
     if html_content is None or html_content == '':
         return None
@@ -75,6 +76,30 @@ def scrape_noticia(html_content):
     }
 
 
+def get_all_news(amount):
+    allLinks = []
+    link = 'https://blog.betrybe.com'
+    while True:
+        html_content = fetch(link)
+
+        moreNewsLinks = scrape_novidades(html_content)
+        allLinks.extend(moreNewsLinks)
+
+        nextLinkPage = scrape_next_page_link(html_content)
+        if amount-len(allLinks) > 0:
+            link = nextLinkPage
+        else:
+            break
+    return allLinks
+
+
 # Requisito 5
 def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+    allLinks = get_all_news(amount)
+    allNews = []
+    for i in range(amount):
+        html_content = fetch(allLinks[i])
+        noticia = scrape_noticia(html_content)
+        allNews.append(noticia)
+    create_news(allNews)
+    return allNews
