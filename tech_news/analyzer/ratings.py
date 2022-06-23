@@ -1,3 +1,4 @@
+from collections import Counter
 from tech_news.database import search_news
 from operator import itemgetter
 
@@ -15,4 +16,11 @@ def top_5_news():
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
+    result = list(search_news({}))
+    newsObjs = []
+
+    for news in result:
+        newsObjs.append(news["category"])
+
+    tupla = Counter(newsObjs).most_common(5)
+    return [name[0] for name in tupla]
