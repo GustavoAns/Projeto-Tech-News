@@ -44,7 +44,6 @@ def search_by_date(date):
         search_news({"timestamp": {"$regex": newDate, '$options': 'i'}})
     )
     listTuplas = []
-    print(result)
     for news in result:
         listTuplas.append((news["title"], news["url"]))
     return listTuplas
@@ -52,7 +51,13 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_tag(tag):
-    """Seu código deve vir aqui"""
+    result = list(
+        search_news({"tags": {"$regex": tag, '$options': 'i'}})
+    )
+    listTuplas = []
+    for news in result:
+        listTuplas.append((news["title"], news["url"]))
+    return listTuplas
 
 
 # Requisito 9
