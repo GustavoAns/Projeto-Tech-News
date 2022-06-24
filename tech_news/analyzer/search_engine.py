@@ -69,4 +69,3 @@ def search_by_category(category):
     for news in result:
         listTuplas.append((news["title"], news["url"]))
     return listTuplas
-
